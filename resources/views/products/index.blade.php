@@ -2,9 +2,9 @@
 
 @section('content')
     <x-success />
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between px-10">
         <x-title color="text-rose-500">Welcome to our store</x-title>
-        <a href="{{ route('products.create') }}" class="bg-green-400 rounded-lg p-4">Create Product</a>
+        <a href="{{ route('products.create') }}" class="bg-green-400 rounded-lg p-4 mt-4">Create Product</a>
     </div>
     <div class="container mx-auto px-4 py-8">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
