@@ -12,7 +12,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::latest()->get();
         $data = [
             'products' => $products,
         ];
@@ -25,7 +25,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.create');
     }
 
     /**
@@ -33,7 +33,31 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return $request; // ? Testing
+
+        // Validate the form
+        $values = $request->validate([
+            'name' => 'required|string',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric',
+            'image' => 'required|image',
+        ]);
+
+        // return $values; // ? Testing
+
+        // Save the image
+        $imagePath = $request->image->store('products', 'public');
+
+        // Save the product
+        $product = new Product();
+        $product->name = $values['name'];
+        $product->description = $values['description'];
+        $product->price = $values['price'];
+        $product->image = $imagePath;
+        $product->save();
+
+        // Redirect to the products.index route with a success message
+        return redirect()->route('products.index')->with('success', 'Product created successfully!');
     }
 
     /**
