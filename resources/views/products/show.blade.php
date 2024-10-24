@@ -15,6 +15,14 @@
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
                         Edit
                     </a>
+                    <form action="{{ route('products.destroy', $product->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">
+                            Delete
+                        </button>
+                    </form>
                 </div>
 
                 <a href="{{ route('products.index') }}" class="bg-green-400 rounded-lg p-2 mt-4">Back</a>
