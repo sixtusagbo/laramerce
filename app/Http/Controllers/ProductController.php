@@ -74,7 +74,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return view('products.edit', ['product' => $product]);
     }
 
     /**
@@ -82,7 +82,29 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        // return $request;
+
+        // Validate the form
+        $values = $request->validate([
+            'name' => 'required|string',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric',
+        ]);
+
+        // Update the product
+        $product->name = $values['name'];
+        $product->description = $values['description'];
+        $product->price = $values['price'];
+
+        // Update the image
+        if ($request->hasFile('image')) {
+            $imagePath = $request->image->store('products', 'public');
+            $product->image = $imagePath;
+        }
+
+        $product->update();
+
+        return back()->with('success', 'Product updated successfully!');
     }
 
     /**
