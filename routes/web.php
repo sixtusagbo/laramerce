@@ -11,7 +11,7 @@ Route::get('/', function () {
 // Route::get('/products', [ProductController::class, 'index']);
 // Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 
-Route::resource('products', ProductController::class)->except('show');
+Route::resource('products', ProductController::class);
 
 // Route::get('/mimi/link-storage', function () {
 //     Artisan::call('storage:link');
