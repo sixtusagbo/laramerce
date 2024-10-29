@@ -45,4 +45,22 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    protected $appends = [
+        'foo',
+    ];
+
+    // Extra attributes example
+    public function getFooAttribute()
+    {
+        return 'bar';
+    }
+
+    /**
+     * Get the cart record associated with the user.
+     */
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
+    }
 }

@@ -21,4 +21,12 @@ class Product extends Model
         'price',
         'image',
     ];
+
+    /**
+     * Get the cart records associated with the product.
+     */
+    public function carts()
+    {
+        return $this->belongsToMany(Cart::class)->withPivot('quantity')->withTimestamps();
+    }
 }

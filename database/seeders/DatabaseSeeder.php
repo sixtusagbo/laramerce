@@ -15,14 +15,16 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
         // RTFM - https://laravel.com/docs/11.x/seeding
 
         $this->call([
-            ProductSeeder::class,
+            // ProductSeeder::class,
+            CartSeeder::class,
+            CartProductSeeder::class,
         ]);
     }
 }
