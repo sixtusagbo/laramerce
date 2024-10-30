@@ -2,9 +2,14 @@
 
 @section('content')
     <x-success />
+    <x-error-messages />
     <div class="flex items-center justify-between px-10">
         <x-title color="text-rose-500">Welcome to our store</x-title>
-        <a href="{{ route('products.create') }}" class="bg-green-400 rounded-lg p-4 mt-4">Create Product</a>
+
+        <div class="flex gap-4">
+            <a href="{{ route('products.create') }}" class="bg-green-400 rounded-lg p-4 mt-4">Create Product</a>
+            <a href="{{ route('cart.index') }}" class="bg-purple-400 rounded-lg p-4 mt-4">Go to Cart</a>
+        </div>
     </div>
     <div class="container mx-auto px-4 py-8">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -17,13 +22,64 @@
                     <p class="text-lg font-medium text-gray-800 mt-2">&#8358;{{ $product->price }}</p>
 
                     <div class="flex items-center justify-between">
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Add to
-                            Cart</button>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+                            onclick="showModal({{ $product->id }})">
+                            Add to Cart
+                        </button>
                         <a href="{{ route('products.show', $product->id) }}"
                             class="bg-green-400 rounded-lg p-2 mt-4">View</a>
+                    </div>
+                </div>
+
+                <!-- Add to cart modal -->
+                <div class="fixed z-10 inset-0 overflow-y-auto hidden flex items-center justify-center"
+                    id="modal-{{ $product->id }}">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg w-full">
+                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-medium text-gray-800">Add {{ $product->name }} to Cart</h3>
+                                <button type="button" onclick="hideModal({{ $product->id }})"
+                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full">
+                                    &times;
+                                </button>
+                            </div>
+                            <form action="{{ route('cart.store') }}" method="POST"
+                                id="add-to-cart-form-{{ $product->id }}">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                                <label for="quantity" class="block text-sm font-medium text-gray-700">Quantity:</label>
+                                <input type="number" name="quantity" value="1"
+                                    class="w-full p-2 border border-gray-300 rounded mt-2">
+
+                                <button type="submit"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-4 w-full">
+                                    Add to Cart
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             @endforeach
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        function showModal(productId) {
+            // Hide all other modals
+            var modals = document.querySelectorAll('[id^="modal-"]');
+            modals.forEach(function(modal) {
+                modal.classList.add('hidden');
+            });
+
+            // Show the current modal
+            document.getElementById(`modal-${productId}`).classList.remove('hidden');
+        }
+
+        function hideModal(productId) {
+            document.getElementById(`modal-${productId}`).classList.add('hidden');
+        }
+    </script>
 @endsection
