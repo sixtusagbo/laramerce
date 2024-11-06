@@ -101,6 +101,7 @@ class CartController extends Controller
     public function remove(Cart $cart, Product $product)
     {
         $product->stock += $cart->products()->find($product->id)->pivot->quantity;
+        $product->update();
         $cart->products()->detach($product->id);
 
         return redirect()->route('cart.index')->with('success', 'Product removed from cart');

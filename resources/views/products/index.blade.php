@@ -8,7 +8,7 @@
             <x-title color="text-rose-500">
                 {{ __('Welcome to our store, :NAME', ['name' => $currentUserName]) }}
             </x-title>
-            <p>Current datetime is {{ $currentDateTime }}</p>
+            <p>{{ $currentDateTime }}</p>
         </div>
 
         <div class="flex gap-4">
