@@ -43,6 +43,15 @@
             </div>
 
             <div class="mb-3">
+                <label for="stock" class="block text-sm font-medium text-gray-700">Stock</label>
+                <input type="number" name="stock" value="{{ $product->stock }}"
+                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md h-10 focus:outline-indigo-500">
+                @error('stock')
+                    <x-error>{{ $message }}</x-error>
+                @enderror
+            </div>
+
+            <div class="mb-3">
                 <label for="image" class="block text-sm font-medium text-gray-700">Product Image</label>
                 <div id="drop-area"
                     class="mt-1 flex flex-col items-center justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 rounded-md">

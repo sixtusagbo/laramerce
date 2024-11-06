@@ -12,7 +12,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::latest()->get();
+        $products = Product::where('stock', '>', 0)->latest()->get();
+
         $data = [
             'products' => $products,
         ];
@@ -41,6 +42,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'image' => 'required|image',
+            'stock' => 'required|integer',
         ]);
 
         // return $values; // ? Testing
@@ -54,6 +56,7 @@ class ProductController extends Controller
         $product->description = $values['description'];
         $product->price = $values['price'];
         $product->image = $imagePath;
+        $product->stock = $values['stock'];
         $product->save();
 
         // Redirect to the products.index route with a success message
@@ -89,6 +92,7 @@ class ProductController extends Controller
             'name' => 'required|string',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
+            'stock' => 'nullable|integer',
         ]);
 
         // Update the product
@@ -101,6 +105,8 @@ class ProductController extends Controller
             $imagePath = $request->image->store('products', 'public');
             $product->image = $imagePath;
         }
+
+        $product->stock = $values['stock'];
 
         $product->update();
 

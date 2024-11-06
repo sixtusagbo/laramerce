@@ -4,8 +4,9 @@
     <x-success />
 
     @if ($cart === null)
-        <div class="bg-white shadow-md rounded-lg p-4">
+        <div class="bg-white shadow-md rounded-lg p-4 flex justify-between items-center">
             <h2 class="text-lg font-medium text-gray-800">No cart found</h2>
+            <a href="{{ route('products.index') }}" class="bg-green-400 rounded-lg p-4 mt-4">Continue Shopping</a>
         </div>
     @else
         <div class="flex items-center justify-between px-10">

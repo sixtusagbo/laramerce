@@ -39,6 +39,11 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1',
         ]);
         $productId = $values['product_id'];
+        $product = Product::find($productId);
+
+        if ($product->stock < $values['quantity']) {
+            return back()->with('error', 'Out of stock');
+        }
 
         $user = Auth::user();
         $cart = $user->cart;
@@ -59,6 +64,9 @@ class CartController extends Controller
             ['quantity' => $values['quantity']]
         );
         $cart->update();
+
+        $product->stock -= $values['quantity'];
+        $product->update();
 
         return back()->with('success', 'Product added to cart');
     }
@@ -92,6 +100,7 @@ class CartController extends Controller
      */
     public function remove(Cart $cart, Product $product)
     {
+        $product->stock += $cart->products()->find($product->id)->pivot->quantity;
         $cart->products()->detach($product->id);
 
         return redirect()->route('cart.index')->with('success', 'Product removed from cart');
@@ -106,6 +115,10 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Cart is empty');
         }
 
+        foreach ($cart->products as $product) {
+            $product->stock += $product->pivot->quantity;
+            $product->update();
+        }
         $cart->products()->detach();
 
         return redirect()->route('cart.index')->with('success', 'Cart cleared');

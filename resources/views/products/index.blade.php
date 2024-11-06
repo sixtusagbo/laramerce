@@ -9,6 +9,25 @@
         <div class="flex gap-4">
             <a href="{{ route('products.create') }}" class="bg-green-400 rounded-lg p-4 mt-4">Create Product</a>
             <a href="{{ route('cart.index') }}" class="bg-purple-400 rounded-lg p-4 mt-4">Go to Cart</a>
+            @if (Route::has('login'))
+                <nav class="flex flex-1 justify-end gap-4">
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="bg-green-400 rounded-lg p-4 mt-4">
+                            Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="bg-green-400 rounded-lg p-4 mt-4">
+                            Log in
+                        </a>
+
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="bg-red-400 rounded-lg p-4 mt-4">
+                                Register
+                            </a>
+                        @endif
+                    @endauth
+                </nav>
+            @endif
         </div>
     </div>
     <div class="container mx-auto px-4 py-8">
@@ -20,6 +39,7 @@
                     <h2 class="text-lg font-medium text-gray-800">{{ $product->name }}</h2>
                     <p class="text-sm text-gray-600">{{ $product->description }}</p>
                     <p class="text-lg font-medium text-gray-800 mt-2">&#8358;{{ $product->price }}</p>
+                    <p class="text-sm text-gray-600">Stock: {{ $product->stock }}</p>
 
                     <div class="flex items-center justify-between">
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
