@@ -4,7 +4,12 @@
     <x-success />
     <x-error-messages />
     <div class="flex items-center justify-between px-10">
-        <x-title color="text-rose-500">Welcome to our store</x-title>
+        <div class="flex flex-col">
+            <x-title color="text-rose-500">
+                {{ __('Welcome to our store, :NAME', ['name' => $currentUserName]) }}
+            </x-title>
+            <p>Current datetime is {{ $currentDateTime }}</p>
+        </div>
 
         <div class="flex gap-4">
             <a href="{{ route('products.create') }}" class="bg-green-400 rounded-lg p-4 mt-4">Create Product</a>
@@ -28,6 +33,17 @@
                     @endauth
                 </nav>
             @endif
+
+            {{-- Select for languages --}}
+            <form action="{{ route('locale.set') }}" method="GET">
+                @csrf
+                <select name="locale" id="locale" onchange="this.form.submit()"
+                    class="bg-yellow-400 border border-gray-300 rounded p-4 mt-4">
+                    <option value="en" @if (app()->getLocale() == 'en') selected @endif>English 🏴󠁧󠁢󠁥󠁮󠁧󠁿</option>
+                    <option value="fr" @if (app()->getLocale() == 'fr') selected @endif>French 🇫🇷</option>
+                    <option value="zh" @if (app()->getLocale() == 'zh') selected @endif>China 🇨🇳</option>
+                </select>
+            </form>
         </div>
     </div>
     <div class="container mx-auto px-4 py-8">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -16,6 +17,8 @@ class ProductController extends Controller
 
         $data = [
             'products' => $products,
+            'currentUserName' => auth()->user()->name ?? 'Guest',
+            'currentDateTime' => Carbon::now()->translatedFormat('l, F, Y'),
         ];
 
         return view('products.index')->with($data);

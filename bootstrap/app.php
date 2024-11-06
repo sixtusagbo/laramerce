@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'role.is_admin' => RoleIsAdmin::class,
             'role.is_customer' => \App\Http\Middleware\RoleIsCustomer::class,
         ]);
+        $middleware->web(append: [
+            \App\Http\Middleware\Localization::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
