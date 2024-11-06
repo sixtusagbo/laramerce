@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -13,7 +14,7 @@ class CartController extends Controller
      */
     public function index()
     {
-        $user = User::find(1);
+        $user = Auth::user();
         $cart = $user->cart;
 
         return view('carts.index')->with('cart', $cart);
@@ -39,11 +40,12 @@ class CartController extends Controller
         ]);
         $productId = $values['product_id'];
 
-        $user = User::find(1);
+        $user = Auth::user();
         $cart = $user->cart;
-        // return $cart;
         if ($cart == null) {
             $cart = new Cart();
+            $cart->user_id = $user->id;
+            $cart->save();
         }
 
         // check if this product has already been added to this cart
@@ -56,7 +58,7 @@ class CartController extends Controller
             $productId,
             ['quantity' => $values['quantity']]
         );
-        $cart->save();
+        $cart->update();
 
         return back()->with('success', 'Product added to cart');
     }
@@ -93,5 +95,19 @@ class CartController extends Controller
         $cart->products()->detach($product->id);
 
         return redirect()->route('cart.index')->with('success', 'Product removed from cart');
+    }
+
+    /**
+     * Clear the cart
+     */
+    public function clear(?Cart $cart)
+    {
+        if ($cart == null) {
+            return redirect()->route('cart.index')->with('error', 'Cart is empty');
+        }
+
+        $cart->products()->detach();
+
+        return redirect()->route('cart.index')->with('success', 'Cart cleared');
     }
 }
