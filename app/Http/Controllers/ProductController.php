@@ -14,6 +14,9 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::where('stock', '>', 0)->latest()->get();
+        // $products = Product::where('stock', '>', 0)->inCart()->latest()->get();
+
+        // return $products; // ? Testing
 
         $data = [
             'products' => $products,

@@ -58,10 +58,18 @@
                     <p class="text-sm text-gray-600">Stock: {{ $product->stock }}</p>
 
                     <div class="flex items-center justify-between">
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-                            onclick="showModal({{ $product->id }})">
-                            Add to Cart
-                        </button>
+                        @if ($product->is_in_cart)
+                            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
+                                disabled>
+                                Already in Cart
+                            </button>
+                        @else
+                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+                                onclick="showModal({{ $product->id }})">
+                                Add to Cart
+                            </button>
+                        @endif
+
                         <a href="{{ route('products.show', $product->id) }}"
                             class="bg-green-400 rounded-lg p-2 mt-4">View</a>
                     </div>

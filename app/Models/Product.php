@@ -23,10 +23,35 @@ class Product extends Model
     ];
 
     /**
+     * The attributes that should be appended to this model.
+     */
+    protected $appends = [
+        'is_in_cart',
+    ];
+
+    /**
      * Get the cart records associated with the product.
      */
     public function carts()
     {
         return $this->belongsToMany(Cart::class)->withPivot('quantity')->withTimestamps();
+    }
+
+    /**
+     * Scope a query to only include products that are in the cart.
+     */
+    public function scopeInCart($query)
+    {
+        return $query->whereHas('carts', function ($query) {
+            $query->where('user_id', auth()->id());
+        });
+    }
+
+    /**
+     * Get the is_in_cart attribute.
+     */
+    public function getIsInCartAttribute(): bool
+    {
+        return $this->carts()->where('user_id', auth()->id())->exists();
     }
 }
