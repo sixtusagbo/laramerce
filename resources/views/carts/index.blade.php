@@ -124,3 +124,12 @@
         }
     </script>
 @endsection
+<style>
+    .aling{
+    display:flex;
+    position: relative;
+    left: 90px;
+    gap: 40px;
+    top: -37px;
+}
+</style>

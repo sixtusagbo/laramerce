@@ -5,7 +5,6 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 
 Route::get('/locale', function () {
     $locale = request('locale');
@@ -35,9 +34,12 @@ Route::get('/payment/verify', [CartController::class, 'verify_payment'])->name('
 //     Artisan::call('storage:link');
 //     return 'success';
 // });
- // remove and add quantity from cart routes
- Route::post('/cart/add/{product}', [CartController::class, 'addquantity'])->name('cart.add');
- Route::post('/cart/minus/{product}', [CartController::class, 'removequantity'])->name('cart.minus');
+// remove and add quantity from cart routes
+Route::post('/cart/add/{product}', [CartController::class, 'addquantity'])->name('cart.add');
+Route::post('/cart/minus/{product}', [CartController::class, 'removequantity'])->name('cart.minus');
+// remove and add quantity from cart routes
+Route::post('/cart/add/{product}', [CartController::class, 'addquantity'])->name('cart.add');
+Route::post('/cart/minus/{product}', [CartController::class, 'removequantity'])->name('cart.minus');
 
 Route::get('/dashboard', function () {
     if (Auth::user()->role === 'admin') {
