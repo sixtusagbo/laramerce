@@ -39,7 +39,16 @@
                             <p class="text-sm text-gray-500">
                                 Total Price: &#8358;{{ $product->total_price }}
                             </p>
-
+                            <div class="aling">
+                                <form action="{{ route('cart.minus', $product->id) }}" method="POST">
+                                    @csrf
+                                    <p onclick="this.parentElement.submit()"><i class='bx bx-minus'></i></p>
+                                </form>
+                                <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                                    @csrf
+                                    <p onclick="this.parentElement.submit()"><i class='bx bx-plus'></i></p>
+                                </form>
+                            </div>
                             <form action="{{ route('cart.remove', ['cart' => $cart, 'product' => $product]) }}"
                                 method="POST">
                                 @csrf
@@ -71,3 +80,12 @@
         </div>
     @endif
 @endsection
+<style>
+    .aling{
+    display:flex;
+    position: relative;
+    left: 90px;
+    gap: 40px;
+    top: -37px;
+}
+</style>

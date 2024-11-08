@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/locale', function () {
     $locale = request('locale');
@@ -32,9 +33,12 @@ Route::delete('/cart/{cart}/product/{product}', [CartController::class, 'remove'
 //     Artisan::call('storage:link');
 //     return 'success';
 // });
+ // remove and add quantity from cart routes
+ Route::post('/cart/add/{product}', [CartController::class, 'addquantity'])->name('cart.add');
+ Route::post('/cart/minus/{product}', [CartController::class, 'removequantity'])->name('cart.minus');
 
 Route::get('/dashboard', function () {
-    if (auth()->user()->role === 'admin') {
+    if (Auth::user()->role === 'admin') {
         return redirect()->route('admin.dashboard');
     }
     return view('dashboard');

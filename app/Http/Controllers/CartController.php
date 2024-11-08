@@ -16,7 +16,7 @@ class CartController extends Controller
     {
         $user = Auth::user();
         $cart = $user->cart;
-        return $cart;
+        // return $cart;
         // return $cart->products; // ? Testing
 
         return view('carts.index')->with('cart', $cart);
@@ -125,5 +125,46 @@ class CartController extends Controller
         $cart->products()->detach();
 
         return redirect()->route('cart.index')->with('success', 'Cart cleared');
+    }
+
+    public function addQuantity($id)
+    {
+        $user = Auth::user();
+        $cart = $user->cart;
+        $product = Product::find($id);
+
+        $addproduct = $cart->products()->where('product_id', $product->id)->first();
+        if ($addproduct && $product->stock > 0) {
+            $quantity = $addproduct->pivot->quantity;
+            $cart->products()->updateExistingPivot($product->id, ['quantity' => $quantity + 1]);
+            $product->stock -= 1;
+            $product->save();
+        } else if ($product->stock <= 0){
+            return redirect()->back()->with('error', 'Product is out of stock');
+            
+        }
+
+        $cart->save();
+        return redirect()->back()->with('success', 'You added one quantity to your cart');
+    }
+    public function removeQuantity($id)
+    {
+        $user = Auth::user();
+        $cart = $user->cart;
+        $product = Product::find($id);
+
+        $addproduct = $cart->products()->where('product_id', $product->id)->first();
+        if ($addproduct && $product->stock > 0) {
+            $quantity = $addproduct->pivot->quantity;
+            $cart->products()->updateExistingPivot($product->id, ['quantity' => $quantity - 1]);
+            $product->stock += 1;
+            $product->save();
+        } else if ($product->stock <= 0){
+            return redirect()->back()->with('error', 'Product is out of stock');
+            
+        }
+
+        $cart->save();
+        return redirect()->back()->with('success', 'You removed one quantity to your cart');
     }
 }
