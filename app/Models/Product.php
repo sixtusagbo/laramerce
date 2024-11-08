@@ -27,6 +27,7 @@ class Product extends Model
      */
     protected $appends = [
         'is_in_cart',
+        'total_price',
     ];
 
     /**
@@ -53,5 +54,19 @@ class Product extends Model
     public function getIsInCartAttribute(): bool
     {
         return $this->carts()->where('user_id', auth()->id())->exists();
+    }
+
+    /**
+     * Get the total_price attribute.
+     */
+    public function getTotalPriceAttribute()
+    {
+        $userId = auth()->id();
+        $cartExists = $this->carts()->where('user_id', $userId)->exists();
+        if (!$cartExists) {
+            return null;
+        }
+        $cart = $this->carts()->where('user_id', $userId)->first();
+        return $this->price * $cart->pivot->quantity;
     }
 }

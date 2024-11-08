@@ -36,9 +36,9 @@
                             <p class="text-sm text-gray-500">{{ $product->description }}</p>
                             <p class="text-sm text-gray-500">Unit Price: &#8358;{{ $product->price }}</p>
                             <p class="text-sm text-gray-500">Quantity: {{ $product->pivot->quantity }}</p>
-                            {{-- Total Price --}}
-                            <p class="text-sm text-gray-500">Total Price:
-                                &#8358;{{ $product->price * $product->pivot->quantity }}</p>
+                            <p class="text-sm text-gray-500">
+                                Total Price: &#8358;{{ $product->total_price }}
+                            </p>
 
                             <form action="{{ route('cart.remove', ['cart' => $cart, 'product' => $product]) }}"
                                 method="POST">
@@ -63,7 +63,7 @@
             </div>
 
             <div class="bg-white shadow-md rounded-lg p-4">
-                <h2 class="text-lg font-medium text-gray-800">Total: ${{ $cart->total }}</h2>
+                <h2 class="text-lg font-medium text-gray-800">Total: ${{ $cart->total_price }}</h2>
                 @if (!$cart->checked_out)
                     <a href="" class="bg-blue-500 text-white rounded-lg p-2 mt-2">Checkout</a>
                 @endif

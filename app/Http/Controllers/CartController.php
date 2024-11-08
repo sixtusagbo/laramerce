@@ -16,6 +16,8 @@ class CartController extends Controller
     {
         $user = Auth::user();
         $cart = $user->cart;
+        return $cart;
+        // return $cart->products; // ? Testing
 
         return view('carts.index')->with('cart', $cart);
     }

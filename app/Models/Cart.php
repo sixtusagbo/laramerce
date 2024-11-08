@@ -35,6 +35,14 @@ class Cart extends Model
     }
 
     /**
+     * Attributes that should be appended to this model.
+     */
+    protected $appends = [
+        // This is the total price of all the items in cart with quantity included
+        'total_price',
+    ];
+
+    /**
      * Get the user that owns the cart.
      */
     public function user()
@@ -48,5 +56,13 @@ class Cart extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class)->withPivot('quantity')->withTimestamps();
+    }
+
+    /**
+     * Get the total price of the cart.
+     */
+    public function getTotalPriceAttribute()
+    {
+        return $this->products->sum->total_price;
     }
 }
