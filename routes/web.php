@@ -25,9 +25,9 @@ Route::get('/', function () {
 Route::resource('products', ProductController::class);
 
 // Cart routes
-Route::resource('cart', CartController::class)->only(['index', 'store'])->middleware('auth');
-Route::delete('/cart/{cart?}', [CartController::class, 'clear'])->name('cart.clear')->middleware('auth');
-Route::delete('/cart/{cart}/product/{product}', [CartController::class, 'remove'])->name('cart.remove')->middleware('auth');
+Route::resource('cart', CartController::class)->only(['index', 'store']);
+Route::delete('/cart/{cart?}', [CartController::class, 'clear'])->name('cart.clear');
+Route::delete('/cart/{cart}/product/{product}', [CartController::class, 'remove'])->name('cart.remove');
 
 // Route::get('/mimi/link-storage', function () {
 //     Artisan::call('storage:link');

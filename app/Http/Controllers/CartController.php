@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
@@ -20,6 +21,13 @@ class CartController extends Controller
         // return $cart->products; // ? Testing
 
         return view('carts.index')->with('cart', $cart);
+    }
+
+    public static function middleware()
+    {
+        return [
+            new Middleware('auth', except: ['store', 'remove', 'clear']),
+        ];
     }
 
     /**
