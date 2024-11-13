@@ -2,6 +2,7 @@
 
 @section('content')
     <x-success />
+    <x-error-messages />
 
     @if ($cart === null)
         <div class="bg-white shadow-md rounded-lg p-4 flex justify-between items-center">
@@ -72,20 +73,54 @@
             </div>
 
             <div class="bg-white shadow-md rounded-lg p-4">
-                <h2 class="text-lg font-medium text-gray-800">Total: ${{ $cart->total_price }}</h2>
+                <h2 class="text-lg font-medium text-gray-800">
+                    Total: ${{ $cart->total_price }}
+                </h2>
                 @if (!$cart->checked_out)
-                    <a href="" class="bg-blue-500 text-white rounded-lg p-2 mt-2">Checkout</a>
+                    <button onclick="initiatePayment()" class="bg-blue-500 text-white rounded-lg p-2 mt-2">Checkout</button>
                 @endif
             </div>
         </div>
     @endif
 @endsection
 <style>
-    .aling{
-    display:flex;
-    position: relative;
-    left: 90px;
-    gap: 40px;
-    top: -37px;
-}
+    .aling {
+        display: flex;
+        position: relative;
+        left: 90px;
+        gap: 40px;
+        top: -37px;
+    }
 </style>
+
+@section('scripts')
+    <script src="https://js.paystack.co/v2/inline.js"></script>
+
+    <script>
+        async function initiatePayment() {
+            const popup = new PaystackPop();
+
+            await popup.checkout({
+                key: "{{ config('app.paystack.public_key') }}",
+                email: "{{ $user->email }}",
+                amount: {{ $cart->total_price * 100 }},
+                firstName: "{{ $user->name }}",
+                onLoad: (response) => {
+                    console.log("onLoad: ", response);
+                },
+                onSuccess: (transaction) => {
+                    console.log("onSuccess: ");
+                    console.log(transaction);
+                    window.location.href = "/payment/verify?reference=" + transaction.reference +
+                        "&cart_id=" + "{{ $cart->id }}";
+                },
+                onCancel: () => {
+                    console.log("Payment cancelled");
+                },
+                onError: (error) => {
+                    console.log("Error: ", error.message);
+                }
+            });
+        }
+    </script>
+@endsection

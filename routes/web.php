@@ -3,6 +3,7 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,6 +29,7 @@ Route::resource('products', ProductController::class);
 Route::resource('cart', CartController::class)->only(['index', 'store']);
 Route::delete('/cart/{cart?}', [CartController::class, 'clear'])->name('cart.clear');
 Route::delete('/cart/{cart}/product/{product}', [CartController::class, 'remove'])->name('cart.remove');
+Route::get('/payment/verify', [CartController::class, 'verify_payment'])->name('payment.verify');
 
 // Route::get('/mimi/link-storage', function () {
 //     Artisan::call('storage:link');
