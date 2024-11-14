@@ -26,7 +26,7 @@ Route::resource('products', ProductController::class);
 
 // Cart routes
 Route::resource('cart', CartController::class)->except(['show', 'edit', 'update']);
-Route::delete('/cart/{cart?}', [CartController::class, 'clear'])->name('cart.clear');
+Route::delete('/cart/{cart?}/clear', [CartController::class, 'clear'])->name('cart.clear');
 Route::delete('/cart/{cart}/product/{product}', [CartController::class, 'remove'])->name('cart.remove');
 Route::get('/payment/verify', [CartController::class, 'verify_payment'])->name('payment.verify');
 

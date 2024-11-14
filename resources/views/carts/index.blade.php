@@ -6,12 +6,14 @@
             <div class="flex items-center justify-end gap-4">
                 <a href="{{ route('products.index') }}" class="bg-green-400 rounded-lg p-2 mt-2">Continue
                     Shopping</a>
-                <form action="{{ route('cart.clear', ['cart' => $cart]) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="bg-red-500 text-white rounded-lg p-2 mt-2">Clear
-                        cart</button>
-                </form>
+                @if ($cart != null)
+                    <form action="{{ route('cart.clear', ['cart' => $cart]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="bg-red-500 text-white rounded-lg p-2 mt-2">Clear
+                            cart</button>
+                    </form>
+                @endif
             </div>
         </h2>
     </x-slot>

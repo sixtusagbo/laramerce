@@ -111,7 +111,7 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Cart is empty');
         }
 
-        foreach ($cart->products() as $product) {
+        foreach ($cart->products as $product) {
             $product->stock += $product->pivot->quantity;
             $product->update();
         }
