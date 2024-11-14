@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Http;
 
 class CartController extends Controller
 {
+    public static function middleware()
+    {
+        return [
+            new Middleware('auth', except: ['store', 'remove', 'clear']),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -24,22 +31,11 @@ class CartController extends Controller
             'user' => $user,
         ];
 
+        if (request()->id != null) {
+            $data['cart'] = Cart::find(request()->id);
+        }
+
         return view('carts.index')->with($data);
-    }
-
-    public static function middleware()
-    {
-        return [
-            new Middleware('auth', except: ['store', 'remove', 'clear']),
-        ];
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -86,27 +82,12 @@ class CartController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Cart $cart)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Cart $cart)
     {
-        //
+        $cart->delete();
+        return back()->with('success', 'Cart removed successfully!');
     }
 
     /**
@@ -130,11 +111,12 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Cart is empty');
         }
 
-        foreach ($cart->products as $product) {
+        foreach ($cart->products() as $product) {
             $product->stock += $product->pivot->quantity;
             $product->update();
         }
         $cart->products()->detach();
+        $cart->update();
 
         return redirect()->route('cart.index')->with('success', 'Cart cleared');
     }
@@ -194,5 +176,19 @@ class CartController extends Controller
 
         // Redirect to cart with error
         return redirect()->route('cart.index')->with('error', 'Payment failed, please try again.');
+    }
+
+    public function orders()
+    {
+        $user = Auth::user();
+        $carts = $user->carts()->checkedOut()->where('checked_out', true)->get();
+        // return $carts; // ? Testing
+
+        $data = [
+            'carts' => $carts,
+            'user' => $user,
+        ];
+
+        return view('carts.orders')->with($data);
     }
 }

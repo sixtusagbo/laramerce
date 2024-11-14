@@ -25,10 +25,13 @@ Route::get('/', function () {
 Route::resource('products', ProductController::class);
 
 // Cart routes
-Route::resource('cart', CartController::class)->only(['index', 'store']);
+Route::resource('cart', CartController::class)->except(['show', 'edit', 'update']);
 Route::delete('/cart/{cart?}', [CartController::class, 'clear'])->name('cart.clear');
 Route::delete('/cart/{cart}/product/{product}', [CartController::class, 'remove'])->name('cart.remove');
 Route::get('/payment/verify', [CartController::class, 'verify_payment'])->name('payment.verify');
+
+
+Route::get('/orders', [CartController::class, 'orders'])->name('orders.index');
 
 // Route::get('/mimi/link-storage', function () {
 //     Artisan::call('storage:link');

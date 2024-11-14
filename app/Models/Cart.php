@@ -65,4 +65,13 @@ class Cart extends Model
     {
         return $this->products->sum->total_price;
     }
+
+
+    /**
+     * Scope for checked out carts.
+     */
+    public function scopeCheckedOut($query)
+    {
+        return $query->where('checked_out', true);
+    }
 }

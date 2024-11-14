@@ -57,10 +57,18 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the cart records associated with the user.
+     */
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    /**
      * Get the cart record associated with the user.
      */
     public function cart()
     {
-        return $this->hasOne(Cart::class);
+        return $this->hasOne(Cart::class)->where('checked_out', false);
     }
 }

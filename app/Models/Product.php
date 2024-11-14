@@ -44,7 +44,8 @@ class Product extends Model
     public function scopeInCart($query)
     {
         return $query->whereHas('carts', function ($query) {
-            $query->where('user_id', auth()->id());
+            $query->where('user_id', auth()->id())
+                ->where('checked_out', false);
         });
     }
 
@@ -53,7 +54,10 @@ class Product extends Model
      */
     public function getIsInCartAttribute(): bool
     {
-        return $this->carts()->where('user_id', auth()->id())->exists();
+        return $this->carts()
+            ->where('user_id', auth()->id())
+            ->where('checked_out', false)
+            ->exists();
     }
 
     /**
@@ -62,11 +66,15 @@ class Product extends Model
     public function getTotalPriceAttribute()
     {
         $userId = auth()->id();
-        $cartExists = $this->carts()->where('user_id', $userId)->exists();
-        if (!$cartExists) {
+        $cart = $this->carts()
+            ->where('user_id', $userId)
+            ->where('checked_out', false)
+            ->first();
+
+        if (!$cart) {
             return null;
         }
-        $cart = $this->carts()->where('user_id', $userId)->first();
+
         return $this->price * $cart->pivot->quantity;
     }
 }
