@@ -3,16 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\User;
+use App\Notifications\NewProductNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Notification;
 
-class ProductController extends Controller
+class ProductController extends Controller implements HasMiddleware
 {
     public static function middleware()
     {
         return [
-            new Middleware('role.is_admin', only: ['store', 'update', 'destroy']),
+            new Middleware('role.is_admin', ['create', 'edit', 'store', 'update', 'destroy']),
         ];
     }
 
@@ -72,6 +76,10 @@ class ProductController extends Controller
         $product->image = $imagePath;
         $product->stock = $values['stock'];
         $product->save();
+
+        // Fire notification
+        $users = User::all();
+        Notification::send($users, new NewProductNotification($product));
 
         // Redirect to the products.index route with a success message
         return redirect()->route('products.index')->with('success', 'Product created successfully!');

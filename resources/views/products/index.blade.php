@@ -3,6 +3,7 @@
 @section('content')
     <x-success />
     <x-error-messages />
+
     <div class="flex items-center justify-between px-10">
         <div class="flex flex-col">
             <x-title color="text-rose-500">

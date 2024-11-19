@@ -1,6 +1,9 @@
 @extends('layouts.base')
 
 @section('content')
+    <x-success />
+    <x-error-messages />
+
     <div class="max-w-2xl mx-auto">
         <div class="bg-white shadow-md rounded-lg p-6">
             <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}"
