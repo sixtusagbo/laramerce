@@ -75,9 +75,6 @@ class CartController extends Controller
         );
         $cart->update();
 
-        $product->stock -= $values['quantity'];
-        $product->update();
-
         return back()->with('success', 'Product added to cart');
     }
 
@@ -95,8 +92,6 @@ class CartController extends Controller
      */
     public function remove(Cart $cart, Product $product)
     {
-        $product->stock += $cart->products()->find($product->id)->pivot->quantity;
-        $product->update();
         $cart->products()->detach($product->id);
 
         return redirect()->route('cart.index')->with('success', 'Product removed from cart');
@@ -111,10 +106,6 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Cart is empty');
         }
 
-        foreach ($cart->products as $product) {
-            $product->stock += $product->pivot->quantity;
-            $product->update();
-        }
         $cart->products()->detach();
         $cart->update();
 
@@ -160,6 +151,13 @@ class CartController extends Controller
 
             if ($referenceIsValid && $amountIsValid && $currencyIsValid && $emailIsValid) {
                 // Wow, Valid!
+
+                // Reduce the stock of all the products in this cart
+                foreach ($cart->products as $product) {
+                    $product->stock -= $product->pivot->quantity;
+                    $product->update();
+                }
+
                 // Update checked_out for this cart
                 $cart->checked_out = true;
                 $cart->checked_out_at = now();
