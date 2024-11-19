@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\Middleware;
 
 class ProductController extends Controller
 {
+    public static function middleware()
+    {
+        return [
+            new Middleware('role.is_admin', only: ['store', 'update', 'destroy']),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
