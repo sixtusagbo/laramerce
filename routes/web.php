@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
@@ -56,3 +57,5 @@ require __DIR__ . '/auth.php';
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->middleware(['auth', 'verified', 'role.is_admin'])->name('admin.dashboard');
+
+Route::get('/notifications/mark_as_read', [NotificationController::class, 'mark_as_read'])->name('notifications.mark_as_read');

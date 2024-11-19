@@ -18,7 +18,8 @@
                         <div class="flex justify-between items-center mb-6">
                             <p>{{ __('Notifications:') }}</p>
                             <div class="flex gap-8">
-                                <a href="#" class="text-green-500">Mark all as read</a>
+                                <a href="{{ route('notifications.mark_as_read') }}" class="text-green-500">Mark all as
+                                    read</a>
                                 <a href="#" class="text-red-400">Delete all</a>
                             </div>
                         </div>
@@ -31,11 +32,13 @@
                                     <p>
                                         <strong class="font-bold">New Product:</strong>
                                         <span class="block sm:inline">
-                                            {{ $notification->data['name'] }} was just added!
+                                            {{ $notification->data['name'] }} was added ·
+                                            {{ \Carbon\Carbon::create($notification->data['created_at'])->diffForHumans() }}
                                         </span>
                                     </p>
 
-                                    <a href="#" class="text-orange-500">Mark as read</a>
+                                    <a href="{{ route('notifications.mark_as_read', ['id' => $notification->id]) }}"
+                                        class="text-orange-500">Mark as read</a>
                                 </div>
                             </div>
                         @endforeach
