@@ -58,4 +58,6 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->middleware(['auth', 'verified', 'role.is_admin'])->name('admin.dashboard');
 
+// Notification routes
 Route::get('/notifications/mark_as_read', [NotificationController::class, 'mark_as_read'])->name('notifications.mark_as_read');
+Route::delete('/notifications/remove_all', [NotificationController::class, 'delete_all'])->name('notifications.delete_all');

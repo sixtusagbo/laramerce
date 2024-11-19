@@ -20,7 +20,15 @@
                             <div class="flex gap-8">
                                 <a href="{{ route('notifications.mark_as_read') }}" class="text-green-500">Mark all as
                                     read</a>
-                                <a href="#" class="text-red-400">Delete all</a>
+
+                                <form action="{{ route('notifications.delete_all') }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit" class="text-red-400 hover:text-red-600 inline">
+                                        Delete all
+                                    </button>
+                                </form>
                             </div>
                         </div>
 

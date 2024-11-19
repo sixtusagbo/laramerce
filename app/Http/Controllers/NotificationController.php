@@ -28,4 +28,16 @@ class NotificationController extends Controller
 
         return back();
     }
+
+    /**
+     * Delete all notifications for this user.
+     */
+    public function delete_all()
+    {
+        $user = Auth::user();
+
+        $user->notifications()->delete();
+
+        return back();
+    }
 }
